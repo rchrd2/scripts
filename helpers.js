@@ -1,6 +1,5 @@
 const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+const { exec, execSync } = require("child_process");
 
 const helpersConfig = {
   dryRun: false,
@@ -19,6 +18,17 @@ const c = (cmd) => {
   log(`>>> ${cmd}`);
   if (!helpersConfig.dryRun) {
     log(execSync(cmd, { encoding: "utf8" }));
+  }
+};
+
+const c2 = (cmd, onExit = () => {}) => {
+  log(`>>> ${cmd}`);
+  if (!helpersConfig.dryRun) {
+    const child = exec(cmd, { encoding: "utf8" });
+    child.stdout.pipe(process.stdout);
+    child.on("exit", onExit);
+  } else {
+    onExit();
   }
 };
 
@@ -42,8 +52,7 @@ const readStdIn = () => {
 
 // const processFile = ()
 
-module.exports = { log, c, cFile, funcFile, helpersConfig, readStdIn };
-
+module.exports = { log, c, c2, cFile, funcFile, helpersConfig, readStdIn };
 
 /*
 Notes:
