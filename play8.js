@@ -11,7 +11,13 @@
  * $ ls -d /Users/richard/Desktop/msc/media/2022/2022-04-01/* | play8.js
  */
 
-const { log, c2, helpersConfig, readStdIn } = require("./helpers.js");
+const {
+  log,
+  c2,
+  exitWhenParentProcessExits,
+  helpersConfig,
+  readStdIn,
+} = require("./helpers.js");
 const fs = require("fs");
 
 helpersConfig.dryRun = false;
@@ -22,12 +28,16 @@ const playFile = (f, index, array) => {
   if (
     fs.lstatSync(f).isDirectory() ||
     f.endsWith(".ZDT") ||
-    !fs.lstatSync(f).isFile()
+    f.endsWith("MASTER.WAV") ||
+    (!fs.lstatSync(f).isFile() &&
+      !f.toLowerCase().endsWith(".wav") &&
+      !f.toLowerCase().endsWith(".aiff") &&
+      !f.toLowerCase().endsWith(".mp3"))
   ) {
     return;
   }
   const p = new Promise((resolve, reject) => {
-    c2(`afplay '${f}'`, resolve);
+    c2(`afplay '${f}'`, resolve, { killOnExit: true });
   });
   return p;
 };
@@ -37,9 +47,6 @@ const playArray = (files) => {
   return Promise.all(files.map(playFile));
 };
 
-/**
- * If directories are passed, read the files in those directories
- */
 const playAllFiles = (inputFiles) => {
   const files = [];
   const directories = [files];
@@ -66,4 +73,6 @@ if (require.main === module) {
     log("You are the weakest link. Goodbye");
     process.exit(0);
   });
+
+  exitWhenParentProcessExits();
 }
