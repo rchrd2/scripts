@@ -56,14 +56,19 @@ const checkRunning = (pid) => {
 // I found this was necessary when running under Automator in
 // order for child process to exit when parent process exits.
 const exitWhenParentProcessExits = () => {
-  setInterval(() => {
-    if (checkRunning(process.ppid)) {
-      // log("running");
-    } else {
-      // log("not running");
+  const check = () => {
+    if (!checkRunning(process.ppid)) {
+      log("not running");
       process.exit(0);
+    } else {
+      // I am going crazy, because this only works when
+      // There is a log here. If there is no log in the check,
+      // it doesn't work
+      console.log("running"); // !important!
+      setTimeout(check, 1000);
     }
-  }, 1000);
+  };
+  setTimeout(check, 1000);
 };
 
 const cFile = (cmd, file) => {
