@@ -28,7 +28,8 @@ const c2 = (cmd, onExit = () => {}) => {
     child.stdout.pipe(process.stdout);
     child.on("exit", onExit);
   } else {
-    onExit();
+    log("Dry run so delaying 1 second..");
+    setTimeout(onExit, 1000);
   }
 };
 
