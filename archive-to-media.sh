@@ -1,4 +1,11 @@
 #!/bin/bash
+# Usage:
+# echo echo '/private/var/folders/wl/scmb9msd3nn69p0d277xsw4c0000gn/T/com.apple.VoiceMemos/.com.apple.uikit.itemprovider.temporary.BptCxO/Monk Ensemble - Oct 17, 2022.m4a' | archive-to-media.sh
+#
+# TODO
+# - make it work with args
+# - wire it up to script
+
 
 # Archiving to media Utils
 # $ yes n | archive ~/Desktop/msc/media $(ls)
