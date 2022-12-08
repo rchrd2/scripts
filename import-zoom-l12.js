@@ -4,24 +4,28 @@
 // into the date-based media directory
 // Usage: node import-zoom-l12.js
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const { execSync } = require("child_process");
 
 // TODO make this a cli param
-const defaultSrc = '/Volumes/L-12_SD/FOLDER02';
-const rootTargetDir = '/Users/richard/Desktop/msc/media';
+let defaultSrc = "/Volumes/L-12_SD/FOLDER02";
+if (!fs.existsSync(defaultSrc)) {
+  defaultSrc = "/Volumes/L-8_SD/PROJECT";
+}
+console.log(defaultSrc);
+const rootTargetDir = "/Users/richard/Desktop/msc/media";
 
 // https://stackoverflow.com/a/52338335
 function copyFolderSync(from, to) {
-    fs.mkdirSync(to);
-    fs.readdirSync(from).forEach(element => {
-        if (fs.lstatSync(path.join(from, element)).isFile()) {
-            fs.copyFileSync(path.join(from, element), path.join(to, element));
-        } else {
-            copyFolderSync(path.join(from, element), path.join(to, element));
-        }
-    });
+  fs.mkdirSync(to);
+  fs.readdirSync(from).forEach((element) => {
+    if (fs.lstatSync(path.join(from, element)).isFile()) {
+      fs.copyFileSync(path.join(from, element), path.join(to, element));
+    } else {
+      copyFolderSync(path.join(from, element), path.join(to, element));
+    }
+  });
 }
 
 function maybeCopyFile(file) {
@@ -31,19 +35,18 @@ function maybeCopyFile(file) {
   let fullFilePath = `${defaultSrc}/${file}`;
   if (!fs.existsSync(targetFile)) {
     console.log(`copying ${fullFilePath} -> ${targetFile}`);
-    fs.mkdirSync(targetDir, {recursive: true});
+    fs.mkdirSync(targetDir, { recursive: true });
     copyFolderSync(fullFilePath, targetFile);
   }
 }
 
-
-
 if (require.main === module) {
-fs.readdir(defaultSrc, (err, files) => {
-  if (!err) files.map(maybeCopyFile);
+  fs.readdir(defaultSrc, (err, files) => {
+    if (!err) files.map(maybeCopyFile);
 
-  // http://hints.macworld.com/article.php?story=20030307112511721
-  console.log("diskutil list external");
-  console.log(execSync("diskutil list external", { encoding: 'utf8' }));
-  console.log("diskutil eject /dev/<name>");
-});}
+    // http://hints.macworld.com/article.php?story=20030307112511721
+    console.log("diskutil list external");
+    console.log(execSync("diskutil list external", { encoding: "utf8" }));
+    console.log("diskutil eject /dev/<name>");
+  });
+}
