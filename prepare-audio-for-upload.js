@@ -31,7 +31,10 @@ if (require.main === module) {
 }
 
 /*
-Note this is scripted with an auotmator action located
+Note this is scripted with an automator action located
 in the folder /Users/richard/Library/Services/
 It needs to accept stdin.
+
+TODOs:
+- bug: files with a ' in the name fail
 */
