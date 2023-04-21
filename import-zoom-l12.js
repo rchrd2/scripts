@@ -8,12 +8,13 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-// TODO make this a cli param
-let defaultSrc = "/Volumes/L-12_SD/FOLDER02";
-if (!fs.existsSync(defaultSrc)) {
-  defaultSrc = "/Volumes/L-8_SD/PROJECT";
-}
-console.log(defaultSrc);
+let DIRECTORIES = [
+  "/Volumes/L-12_SD/FOLDER02",
+  "/Volumes/NO NAME/FOLDER02",
+  "/Volumes/L-8_SD/FOLDER02",
+  "/Volumes/L-8_SD/PROJECT",
+];
+
 const rootTargetDir = "/Users/richard/Desktop/msc/media";
 
 // https://stackoverflow.com/a/52338335
@@ -28,11 +29,11 @@ function copyFolderSync(from, to) {
   });
 }
 
-function maybeCopyFile(file) {
+function maybeCopyFile(srcDir, file) {
   let parts = file.match(/(\d\d)(\d\d)(\d\d)_\d+/);
   let targetDir = `${rootTargetDir}/20${parts[1]}/20${parts[1]}-${parts[2]}-${parts[3]}`;
   let targetFile = `${targetDir}/${file}`;
-  let fullFilePath = `${defaultSrc}/${file}`;
+  let fullFilePath = `${srcDir}/${file}`;
   if (!fs.existsSync(targetFile)) {
     console.log(`copying ${fullFilePath} -> ${targetFile}`);
     fs.mkdirSync(targetDir, { recursive: true });
@@ -40,13 +41,21 @@ function maybeCopyFile(file) {
   }
 }
 
-if (require.main === module) {
-  fs.readdir(defaultSrc, (err, files) => {
-    if (!err) files.map(maybeCopyFile);
+function runCopy(srcDir) {
+  if (fs.existsSync(srcDir)) {
+    console.log(`Checking for files in ${srcDir}`);
 
-    // http://hints.macworld.com/article.php?story=20030307112511721
-    console.log("diskutil list external");
-    console.log(execSync("diskutil list external", { encoding: "utf8" }));
-    console.log("diskutil eject /dev/<name>");
-  });
+    fs.readdir(srcDir, (err, files) => {
+      if (!err) files.map((file) => maybeCopyFile(srcDir, file));
+
+      // http://hints.macworld.com/article.php?story=20030307112511721
+      console.log("diskutil list external");
+      console.log(execSync("diskutil list external", { encoding: "utf8" }));
+      console.log("diskutil eject /dev/<name>");
+    });
+  }
+}
+
+if (require.main === module) {
+  DIRECTORIES.map(runCopy);
 }
