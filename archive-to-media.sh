@@ -18,8 +18,8 @@ archive() {
         local YEAR=`date -r "${f}" "+%Y"`
         local TARGET_DIR="$BASE/$YEAR/$DATE"
         mkdir -p "${TARGET_DIR}"
-        echo cp -iv "${f}" "${TARGET_DIR}/"
-        cp -iv "$f" "${TARGET_DIR}/"
+        echo cp -iv -n "${f}" "${TARGET_DIR}/"
+        cp -iv -n "$f" "${TARGET_DIR}/" || true
     done
 }
 
