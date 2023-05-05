@@ -13,6 +13,8 @@ let DIRECTORIES = [
   "/Volumes/NO NAME/FOLDER02",
   "/Volumes/L-8_SD/FOLDER02",
   "/Volumes/L-8_SD/PROJECT",
+  "/Volumes/H4N_SD/STEREO/FOLDER01",
+  "/Volumes/H4N_SD/STEREO/FOLDER02",
 ];
 
 const rootTargetDir = "/Users/richard/Desktop/msc/media";
@@ -31,6 +33,7 @@ function copyFolderSync(from, to) {
 
 function maybeCopyFile(srcDir, file) {
   let parts = file.match(/(\d\d)(\d\d)(\d\d)_\d+/);
+  console.log(file, parts);
   let targetDir = `${rootTargetDir}/20${parts[1]}/20${parts[1]}-${parts[2]}-${parts[3]}`;
   let targetFile = `${targetDir}/${file}`;
   let fullFilePath = `${srcDir}/${file}`;

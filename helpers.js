@@ -15,6 +15,9 @@ const log = (v) => {
   helpersConfig.enableConsoleLog && console.log(v);
 };
 
+/**
+ * Run a command synchronously
+ */
 const c = (cmd) => {
   log(`>>> ${cmd}`);
   if (!helpersConfig.dryRun) {
@@ -71,10 +74,16 @@ const exitWhenParentProcessExits = () => {
   setTimeout(check, 1000);
 };
 
+/**
+ * Run a command if the file does not exist
+ */
 const cFile = (cmd, file) => {
   funcFile(() => c(cmd), file);
 };
 
+/**
+ * Run a function if the file does not exist
+ */
 const funcFile = (func, file) => {
   if (!fs.existsSync(file)) {
     func();
@@ -89,6 +98,67 @@ const readStdIn = () => {
   return [];
 };
 
+const readStdInFromArgs = (stdin) => {
+  if (!stdin.isTTY) {
+    return fs.readFileSync(stdin.fd, "utf-8").toString().trim().split("\n");
+  }
+  return [];
+};
+
+/**
+ * Adds a string of text to the end of a file before the file extension
+ */
+const appendToFileName = (fileName, append) => {
+  let parts = fileName.match(/(\.\w\w\w)$/gi);
+  if (parts) {
+    return fileName.replace(parts[0], `${append}${parts[0]}`);
+  } else {
+    return fileName;
+  }
+};
+
+/**
+ * Changes the extension of a given file name string
+ */
+const changeExtension = (fileName, extension) => {
+  let parts = fileName.match(/(\.\w\w\w)$/gi);
+  if (parts) {
+    return fileName.replace(parts[0], `${extension}`);
+  } else {
+    return fileName;
+  }
+};
+
+/**
+ * Check if a command is installed and exit if not
+ */
+const requireCommand = (cmd) => {
+  try {
+    execSync(`which ${cmd}`, { encoding: "utf8" });
+  } catch (error) {
+    console.error(`Required command "${cmd}" not found. Please install`);
+    process.exit(1);
+  }
+};
+
+/**
+ * Run a function on each file passed in via stdin or command line
+ */
+const pipeable = (func, inputTypes, requiredCommands) => {
+  requiredCommands?.forEach(requireCommand);
+
+  var argv = require("minimist")(process.argv.slice(2));
+  [...readStdIn(), ...argv["_"]].forEach((f) => {
+    if (
+      !inputTypes ||
+      inputTypes.length == 0 ||
+      inputTypes.some((type) => f.toLowerCase().endsWith(type))
+    ) {
+      func(f);
+    }
+  });
+};
+
 module.exports = {
   log,
   c,
@@ -99,6 +169,10 @@ module.exports = {
   funcFile,
   helpersConfig,
   readStdIn,
+  readStdInFromArgs,
+  appendToFileName,
+  changeExtension,
+  pipeable,
 };
 
 /*
