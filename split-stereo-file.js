@@ -21,7 +21,7 @@ const processFile = (f, index, array) => {
     right = f.replace(/\.\w\w\w$/gi, "-right.wav");
     cFile(
       `ffmpeg -i '${originalF}' -map_channel 0.0.0 '${left}' -map_channel 0.0.1 '${right}'`,
-      f
+      left
     );
   }
 };

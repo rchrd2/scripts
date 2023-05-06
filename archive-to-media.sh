@@ -13,13 +13,13 @@ archive() {
     if [ ! -d "$1" ]; then echo Missing base; return 1; fi
     local BASE=$1
     for f in "${@:2:$#-1}"; do
-        if [ -d "$f" ]; then continue; fi;
+        # if [ -d "$f" ]; then continue; fi;
         local DATE=`date -r "${f}" "+%Y-%m-%d"`
         local YEAR=`date -r "${f}" "+%Y"`
         local TARGET_DIR="$BASE/$YEAR/$DATE"
         mkdir -p "${TARGET_DIR}"
-        echo cp -iv -n "${f}" "${TARGET_DIR}/"
-        cp -iv -n "$f" "${TARGET_DIR}/" || true
+        echo cp -riv -n "${f}" "${TARGET_DIR}/"
+        cp -riv -n "$f" "${TARGET_DIR}/" || true
     done
 }
 

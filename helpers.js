@@ -5,14 +5,18 @@ const helpersConfig = {
   dryRun: false,
   // How to monitor syslog:
   // $ log stream --info --debug --predicate 'process == "syslog"'
-  enableSyslog: true,
+  enableSyslog: false,
   enableConsoleLog: true,
 };
 
 const log = (v) => {
   helpersConfig.enableSyslog &&
-    execSync(`syslog -s -l i "${v}"`, { encoding: "utf8" });
+    execSync(`syslog -s -l i "${escapeShell(v)}"`, { encoding: "utf8" });
   helpersConfig.enableConsoleLog && console.log(v);
+};
+
+const escapeShell = function (cmd) {
+  return '"' + String(cmd).replace(/(["'$`\\])/g, "\\$1") + '"';
 };
 
 /**
@@ -20,6 +24,7 @@ const log = (v) => {
  */
 const c = (cmd) => {
   log(`>>> ${cmd}`);
+  log(helpersConfig.dryRun);
   if (!helpersConfig.dryRun) {
     log(execSync(cmd, { encoding: "utf8" }));
   }
