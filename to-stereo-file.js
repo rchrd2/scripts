@@ -7,6 +7,7 @@ const {
   cFile,
   helpersConfig,
   appendToFileName,
+  log,
 } = require("./helpers.js");
 
 helpersConfig.dryRun = false;
@@ -17,12 +18,12 @@ const processFile = (f, index, array) => {
   if (prevFile == null) {
     prevFile = f;
   } else {
-    let stereoFile = appendToFileName(f, "-stereo");
-    let args = ` -filter_complex "[0:a]pan=stereo|c0=c1[a1];[1:a]pan=stereo|c0=c1[a2];[a1][a2]amerge=inputs=2[a]" -map "[a]"`;
-    args = `-filter_complex "[0:a][1:a]amerge=inputs=2,pan=stereo|c0=c1[left]" -map "[left]" `;
-    args = `-filter_complex "[0:a]pan=1c|c0=1[left];[1:a]pan=1c|c0=0[right];[left][right]amerge=inputs=2[a]" -map "[a]"`;
+    // As a heuristic, sort the filenames to decide left and right
+    const files = [prevFile, f].sort();
+    let stereoFile = appendToFileName(f, "-stereo-sox");
+    log(`left: ${files[0]}\nright: ${files[1]}`);
     cFile(
-      `ffmpeg -i '${prevFile}' -i '${f}' ${args} '${stereoFile}'`,
+      `sox '${files[0]}' '${files[1]}' '${stereoFile}' channels 2`,
       stereoFile
     );
     prevFile = null;
@@ -30,5 +31,5 @@ const processFile = (f, index, array) => {
 };
 
 if (require.main === module) {
-  pipeable(processFile, [".wav"], ["ffmpeg"]);
+  pipeable(processFile, [".wav"], ["sox"]);
 }
