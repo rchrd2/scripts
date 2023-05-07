@@ -24,7 +24,6 @@ const escapeShell = function (cmd) {
  */
 const c = (cmd) => {
   log(`>>> ${cmd}`);
-  log(helpersConfig.dryRun);
   if (!helpersConfig.dryRun) {
     log(execSync(cmd, { encoding: "utf8" }));
   }
