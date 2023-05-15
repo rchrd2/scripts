@@ -1,6 +1,11 @@
 const fs = require("fs");
 const { exec, execSync } = require("child_process");
 
+const syslog = require('syslog-client');
+
+let syslogInstance = null;
+
+
 const helpersConfig = {
   dryRun: false,
   // How to monitor syslog:
@@ -10,8 +15,16 @@ const helpersConfig = {
 };
 
 const log = (v) => {
-  helpersConfig.enableSyslog &&
-    execSync(`syslog -s -l i "${escapeShell(v)}"`, { encoding: "utf8" });
+  if (helpersConfig.enableSyslog) {
+    if (!syslogInstance) {
+      syslogInstance = syslog.createClient('localhost');
+    }
+    syslogInstance.log((v), {
+      severity: syslog.Severity.Informational,
+      facility: syslog.Facility.User
+    });
+    // execSync(`syslog -s -l i "${escapeShell(v)}"`, { encoding: "utf8" });
+  }
   helpersConfig.enableConsoleLog && console.log(v);
 };
 
