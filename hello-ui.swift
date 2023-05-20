@@ -3,6 +3,11 @@
 
 // Displays UI in an NSWindow which can interact with the commandline
 // Usage: `echo "Bar" | ./hello-ui.swift`
+//
+// Unfortunately this is a bit buggy. The window opens in the background and
+// it is not selectable with Expose.
+//
+// See hello-ui2.swift
 
 import Foundation
 import SwiftUI
