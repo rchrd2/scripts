@@ -54,8 +54,27 @@ if files.count == 0 {
 }
 
 print("Playing \(files.count) files")
-files.forEach {
-  _ = playSound(url: URL(fileURLWithPath: $0))
+// files.forEach {
+//   _ = playSound(url: URL(fileURLWithPath: $0))
+// }
+
+var players: [AVAudioPlayer] = []
+
+for file in files {
+  let url = URL(fileURLWithPath: file)
+  var player: AVAudioPlayer?
+  player = try AVAudioPlayer(contentsOf: url)
+  if player != nil {
+    players.append(player!)
+
+    // Thread.sleep(forTimeInterval: player?.duration ?? 0.0)
+  }
 }
+
+for player in players {
+  player.play()
+}
+
+sleep(5)
 
 print("done")
