@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { c, helpersConfig, pipeable } = require("./helpers.js");
+const { c, helpersConfig, pipeable } = require("../helpers.js");
 
 helpersConfig.dryRun = false;
 

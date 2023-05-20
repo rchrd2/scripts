@@ -17,7 +17,7 @@ const {
   exitWhenParentProcessExits,
   helpersConfig,
   readStdIn,
-} = require("./helpers.js");
+} = require("../helpers.js");
 const fs = require("fs");
 
 helpersConfig.dryRun = false;

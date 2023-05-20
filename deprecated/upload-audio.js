@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const { c, helpersConfig, pipeable } = require("./helpers.js");
+const { c, helpersConfig, pipeable } = require("../helpers.js");
 
 const {
   processFile: prepareAudioForUpload,
-} = require("./prepare-audio-for-upload.js");
+} = require("../prepare-audio-for-upload.js");
 
 helpersConfig.dryRun = false;
 

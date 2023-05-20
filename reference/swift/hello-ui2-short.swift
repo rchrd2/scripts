@@ -30,8 +30,6 @@ extension NSApplication {
   }
 }
 
-// Inspired by https://www.cocoawithlove.com/2010/09/minimalist-cocoa-programming.html
-
 extension NSApplication {
   var customMenu: NSMenu {
     let appMenu = NSMenuItem()
