@@ -4,7 +4,7 @@ import os.log
 var HelpersConfig: [String: Bool] = [
     "dryRun": false,
     // How to monitor syslog:
-    // $ log stream --info --debug --predicate 'process == "syslog"'
+    // $ log stream --info --debug --predicate 'eventMessage CONTAINS "SCRIPTS"
     "enableSyslog": true,
     "enablePrint": false,
 ]
