@@ -21,8 +21,27 @@ var players: [AVAudioPlayer] = []
 var longestTime = 5.0
 var timeOffset = 0.0
 
+var allFiles: [String] = []
+
 for file in files {
   log("file \(file)")
+  let fileUrl = URL(fileURLWithPath: file)
+  if fileUrl.isDirectory {
+    log("isDirectory")
+    let children = try FileManager.default.contentsOfDirectory(atPath: file)
+    for child in children {
+      // When playing a directory, exclude MASTER.WAV (often the mixdown)
+      // and also mp3 files (often derivitives)
+      if child != "MASTER.WAV" && !child.lowercased().hasSuffix(".mp3") {
+        allFiles.append(file + "/" + child)
+      }
+    }
+  } else {
+    allFiles.append(file)
+  }
+}
+
+for file in allFiles {
   if !file.lowercased().hasSuffix(".wav") && !file.lowercased().hasSuffix(".mp3") {
     continue
   }

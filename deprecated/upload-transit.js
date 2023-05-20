@@ -5,6 +5,19 @@ const { c, helpersConfig, pipeable } = require("./helpers.js");
 helpersConfig.dryRun = false;
 
 const uploadUrl = "rcaceres@dev.rchrd.net:sites/net.rchrd.dev/web/transit/";
+const allowedExtensions = [
+  ".wav",
+  ".mp3",
+  ".png",
+  ".dat",
+  ".mov",
+  ".jpg",
+  ".tif",
+  ".aif",
+  ".mp4",
+  ".nef",
+  ".zip",
+];
 
 const processFile = (f, index, array) => {
   // c(`scp '${f}' ${uploadUrl}`);
@@ -12,19 +25,7 @@ const processFile = (f, index, array) => {
 };
 
 if (require.main === module) {
-  pipeable(processFile, [
-    ".wav",
-    ".mp3",
-    ".png",
-    ".dat",
-    ".mov",
-    ".jpg",
-    ".tif",
-    ".aif",
-    ".mp4",
-    ".nef",
-    ".zip",
-  ]);
+  pipeable(processFile, allowedExtensions);
 }
 
 module.exports = {

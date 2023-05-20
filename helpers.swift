@@ -1,5 +1,7 @@
+import AppKit
 // This was converted from NodeJS to Swift by ChatGPT
 import Foundation
+import SwiftUI
 import os.log
 
 var HelpersConfig: [String: Bool] = [
@@ -42,6 +44,13 @@ public func readFiles() -> [String] {
   return filePaths
 }
 
+// a function that runs a function if the file path doesn't exist
+func runIfFileDoesntExist(_ filePath: String, _ function: () -> Void) {
+  if !FileManager.default.fileExists(atPath: filePath) {
+    function()
+  }
+}
+
 // This was converted from NodeJS to Swift by ChatGPT
 public func exitWhenParentProcessExits() {
   var check: (() -> Void)?
@@ -62,8 +71,8 @@ public func exitWhenParentProcessExits() {
 
 // This was converted from NodeJS to Swift by ChatGPT
 public func checkRunning(_ processIdentifier: Int32) -> Bool {
-  log("checkRunning \(processIdentifier)")  // is this needed?
   // weirdly in my testing a/b tested and worked only with log there
+  log("checkRunning \(processIdentifier)")
 
   let process = Process()
   process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
@@ -78,5 +87,47 @@ public func checkRunning(_ processIdentifier: Int32) -> Bool {
     return output?.contains("\(processIdentifier)") ?? false
   } catch {
     return false
+  }
+}
+
+extension NSApplication {
+  public func run<V: View>(@ViewBuilder view: () -> V) {
+    let appDelegate = AppDelegate(view())
+    NSApp.setActivationPolicy(.regular)
+    delegate = appDelegate
+    run()
+  }
+}
+
+class AppDelegate<V: View>: NSObject, NSApplicationDelegate, NSWindowDelegate {
+  var contentView: V
+
+  init(_ contentView: V) {
+    self.contentView = contentView
+  }
+
+  func applicationDidFinishLaunching(_ notification: Notification) {
+    NSApp.activate(ignoringOtherApps: true)
+  }
+}
+
+func runUI<V: View>(contentView: V) {
+  NSApplication.shared.run {
+    let window = NSWindow(
+      contentRect: NSRect(x: 0, y: 0, width: 200, height: 200),
+      styleMask: [.titled, .closable, .resizable],
+      backing: .buffered,
+      defer: false
+    )
+    window.contentView = NSHostingView(rootView: contentView)
+    window.makeKeyAndOrderFront(nil)
+    window.center()
+    return contentView
+  }
+}
+
+extension URL {
+  var isDirectory: Bool {
+    (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
   }
 }

@@ -8,6 +8,7 @@
 // it is not selectable with Expose.
 //
 // See hello-ui2.swift
+// See hello-ui-confirm.swift for reduced code
 
 import Foundation
 import SwiftUI
