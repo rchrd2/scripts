@@ -7,6 +7,9 @@
 let PROMPT_TO_EJECT = false
 let SKIP_WRONG_DATES = true
 
+// When true, ignores the default _MIX.wav files Tascam X8 creates
+let IGNORE_TASCAM_MIX_FILES = true
+
 func tascamX8FileToDest(at url: URL, mediaPathUrl: URL = helpersConfig.mediaPathUrl) throws -> URL {
   // Parses the date from a file like, 230502_0013_5-6.wav
   // and returns a file url to {mediaPathUrl}/2023-05-02/230502_0013_5-6.wav
@@ -31,6 +34,10 @@ func tascamX8FileToDest(at url: URL, mediaPathUrl: URL = helpersConfig.mediaPath
   // If year is less than 2023 throw an exception
   if SKIP_WRONG_DATES && Int(year) ?? 0 < 2023 {
     throw "Year is less than 2023"
+  }
+
+  if IGNORE_TASCAM_MIX_FILES && filename.contains("_MIX") {
+    throw "Ignoring mix file"
   }
 
   return destinationFile
