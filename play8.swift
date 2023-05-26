@@ -32,7 +32,9 @@ for file in files {
     for child in children {
       // When playing a directory, exclude MASTER.WAV (often the mixdown)
       // and also mp3 files (often derivitives)
-      if child != "MASTER.WAV" && !child.lowercased().hasSuffix(".mp3") {
+      if child != "MASTER.WAV" && !child.lowercased().hasSuffix(".mp3")
+        && !child.contains("_MIX")
+      {
         allFiles.append(file + "/" + child)
       }
     }
