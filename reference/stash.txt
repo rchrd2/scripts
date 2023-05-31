@@ -1,4 +1,7 @@
 find . -name '*.tif' -exec magick convert -quality 98% "{}" "{}.jpg" \;
 
-# half the size of videos in a folder
+# reduce framerate of video by half
 for f in *.MOV; do ffmpeg -i "$f" -vf decimate=2:2 "decimate/${f%.MOV}_half.MOV"; done
+
+# in vim, prettify json
+:%!python -m json.tool

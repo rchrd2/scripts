@@ -67,7 +67,9 @@ func runIfFileUrlDoesntExist(_ url: URL, _ function: () -> Void) {
 }
 
 func runIfFileSizeIsDifferent(
-  _ sourceURL: URL, _ destURL: URL, onNotExists: () -> Void, onSizeDifferent: () -> Void
+  _ sourceURL: URL, _ destURL: URL, onNotExists: () -> Void, onSizeDifferent: () -> Void,
+  onSame:
+    () -> Void
 ) {
   // only run the function if the the destURL doesn't exist or the file size is different
   if !FileManager.default.fileExists(atPath: destURL.path) {
@@ -81,6 +83,7 @@ func runIfFileSizeIsDifferent(
       onSizeDifferent()
     } else {
       log("File size is the same for \(sourceURL.path) and \(destURL.path)")
+      onSame()
     }
   }
 }
@@ -154,9 +157,22 @@ func addSpotlightFinderTag(to fileURL: URL, with tag: String) {
   // tag --add tagname file
   // TODO figure out how to do this in swift
   // TODO add function to check for presence of tag
+  // Maybe https://developer.apple.com/documentation/findersync/fifindersynccontroller/2889862-settagdata
   let task = Process()
   task.launchPath = "/usr/local/bin/tag"
   task.arguments = ["--add", tag, fileURL.path]
+  task.launch()
+  task.waitUntilExit()
+}
+
+func removeSpotlightFinderTag(to fileURL: URL, with tag: String) {
+  // shell out to
+  // tag --remove tagname file
+  // TODO figure out how to do this in swift
+  // TODO add function to check for presence of tag
+  let task = Process()
+  task.launchPath = "/usr/local/bin/tag"
+  task.arguments = ["--remove", tag, fileURL.path]
   task.launch()
   task.waitUntilExit()
 }

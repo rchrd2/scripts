@@ -24,9 +24,8 @@ func uploadFile(_ file: String) {
   task.waitUntilExit()
 }
 
-var files = readFiles()
-
-for file in files {
+func processFile(_ file: URL) {
+  // TODO
   // check if file is allowed
   var allowed = false
   for ext in allowedExtensions {
@@ -37,7 +36,7 @@ for file in files {
   }
   if !allowed {
     log("Skipping \(file)")
-    continue
+    return
   }
 
   // if it ends with mp3, also upload the .dat file for convenience
@@ -88,5 +87,15 @@ for file in files {
       NSApplication.shared.stop(nil)
     }
   }
-  runUI(contentView: contentView)
+
+  // if file doesnt end in .dat
+  if !file.lowercased().hasSuffix(".dat") {
+    runUI(contentView: contentView)
+  }
+}
+
+var files = readFiles()
+
+for file in files {
+  processFile(file)
 }

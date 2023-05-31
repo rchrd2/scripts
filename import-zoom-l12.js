@@ -13,6 +13,7 @@ let DIRECTORIES = [
   "/Volumes/NO NAME/FOLDER02",
   "/Volumes/L-8_SD/FOLDER02",
   "/Volumes/L-8_SD/PROJECT",
+  "/Volumes/NO NAME/PROJECT",
   "/Volumes/H4N_SD/STEREO/FOLDER01",
   "/Volumes/H4N_SD/STEREO/FOLDER02",
 ];
