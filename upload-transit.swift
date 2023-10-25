@@ -26,7 +26,7 @@ let allowedExtensions = [
   ".swift",
 ]
 
-var files = readFiles()
+var files: [String] = readFiles()
 
 log("Playing \(files.count) files")
 

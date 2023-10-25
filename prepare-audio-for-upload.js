@@ -9,8 +9,12 @@ const { cFile, helpersConfig, readStdIn, pipeable } = require("./helpers.js");
 
 helpersConfig.dryRun = false;
 
+// Set to true to create mp3 if it's not an mp3
+const createMp3 = true;
+
 const processFile = (f, index, array) => {
-  if (!f.endsWith(".mp3")) {
+  // cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
+  if (createMp3 && !f.endsWith(".mp3")) {
     let originalF = f;
     f = f.replace(/\.\w\w\w$/gi, ".mp3");
     cFile(`ffmpeg -i '${originalF}' -ab "320k" '${f}'`, f);
@@ -25,7 +29,7 @@ const processFile = (f, index, array) => {
 if (require.main === module) {
   pipeable(
     processFile,
-    [".wav", ".mp3", ".aif", ".mp4"],
+    [".wav", ".mp3", ".aif", ".mp4", ".m4a"],
     ["ffmpeg", "audiowaveform"]
   );
 }

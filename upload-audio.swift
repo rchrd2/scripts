@@ -15,11 +15,11 @@ let allowedExtensions = [
   ".wav", ".mp3", ".png", ".dat",
 ]
 
-func uploadFile(_ file: String) {
-  log("Uploading \(file)")
+func uploadFile(_ file: URL) {
+  log("Uploading \(file.path())")
   let task = Process()
   task.launchPath = "/usr/bin/scp"
-  task.arguments = [file, uploadUrl]
+  task.arguments = [file.path(), uploadUrl]
   task.launch()
   task.waitUntilExit()
 }
@@ -29,7 +29,7 @@ func processFile(_ file: URL) {
   // check if file is allowed
   var allowed = false
   for ext in allowedExtensions {
-    if file.lowercased().hasSuffix(ext) {
+    if file.path().lowercased().hasSuffix(ext) {
       allowed = true
       break
     }
@@ -40,8 +40,8 @@ func processFile(_ file: URL) {
   }
 
   // if it ends with mp3, also upload the .dat file for convenience
-  if file.lowercased().hasSuffix(".mp3") {
-    let datFile = file + ".dat"
+  if file.path().lowercased().hasSuffix(".mp3") {
+    let datFile = file.path() + ".dat"
     if !FileManager.default.fileExists(atPath: datFile) {
       // call prepare-audio-for-upload.js {datFile}
       // TODO make this work..
@@ -56,13 +56,13 @@ func processFile(_ file: URL) {
       // task.waitUntilExit()
 
     }
-    uploadFile(datFile)
+    uploadFile(URL(fileURLWithPath: datFile))
   }
 
   uploadFile(file)
 
   log("Uploaded \(file)")
-  let basename = URL(fileURLWithPath: file).lastPathComponent
+  let basename = file.lastPathComponent
   let publicUrl =
     publicUrlBase + basename.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
   log("Public URL: \(publicUrl)")
@@ -89,13 +89,13 @@ func processFile(_ file: URL) {
   }
 
   // if file doesnt end in .dat
-  if !file.lowercased().hasSuffix(".dat") {
+  if !file.path().lowercased().hasSuffix(".dat") {
     runUI(contentView: contentView)
   }
 }
 
-var files = readFiles()
+var files: [String] = readFiles()
 
 for file in files {
-  processFile(file)
+  processFile(URL(fileURLWithPath: file))
 }

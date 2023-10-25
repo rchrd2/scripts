@@ -16,7 +16,7 @@ var helpersConfig = HelpersConfig(
   // $ log stream --info --debug --predicate 'eventMessage CONTAINS "SCRIPTS"
   enableSyslog: true,
   enablePrint: false,
-  mediaPathUrl: URL(fileURLWithPath: "/Users/richard/Desktop/msc/media")
+  mediaPathUrl: URL(fileURLWithPath: "/Users/richard/msc/media")
 )
 
 public func name() {

@@ -11,7 +11,7 @@ let PROMPT_TO_EJECT = false
 let SKIP_WRONG_DATES = true
 
 // When true, ignores the default _MIX.wav files Tascam X8 creates
-let IGNORE_TASCAM_MIX_FILES = true
+let IGNORE_TASCAM_MIX_FILES = false
 
 enum AudioDeviceTypes: String {
   case tascamX8 = "TASCAM_X-8"
@@ -82,8 +82,8 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
       print("File size is the same. Skipping")
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
-      // sleep for 100ms
-      usleep(100000)
+      // sleep for 25ms
+      usleep(25000)
     })
 }
 
