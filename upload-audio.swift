@@ -99,3 +99,7 @@ var files: [String] = readFiles()
 for file in files {
   processFile(URL(fileURLWithPath: file))
 }
+
+func main() {
+
+}

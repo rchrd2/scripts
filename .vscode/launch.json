@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/import-audio",
+      "name": "Debug import-audio (import-audio)",
+      "program": "${workspaceFolder:scripts}/import-audio/.build/debug/import-audio",
+      "preLaunchTask": "swift: Build Debug import-audio (import-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/import-audio",
+      "name": "Release import-audio (import-audio)",
+      "program": "${workspaceFolder:scripts}/import-audio/.build/release/import-audio",
+      "preLaunchTask": "swift: Build Release import-audio (import-audio)"
+    }
+  ]
+}

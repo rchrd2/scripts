@@ -4,6 +4,8 @@
 /// Example usage:
 /// $ ./custom-swift.sh import-audio.swift
 
+import Foundation
+
 // require ./helpers.swift
 // exitWhenParentProcessExits()
 

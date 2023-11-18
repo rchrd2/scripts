@@ -10,13 +10,19 @@ struct HelpersConfig {
   var mediaPathUrl: URL
 }
 
+// read an ENV variable called MEDIA_DIR
+// if it exists, use that as the mediaPathUrl
+// otherwise use the default
+let mediaDir = ProcessInfo.processInfo.environment["MEDIA_DIR"]
+let mediaPathUrl = URL(fileURLWithPath: mediaDir ?? "/Users/richard/msc/media")
+
 var helpersConfig = HelpersConfig(
   dryRun: false,
   // How to monitor syslog:
   // $ log stream --info --debug --predicate 'eventMessage CONTAINS "SCRIPTS"
   enableSyslog: true,
   enablePrint: false,
-  mediaPathUrl: URL(fileURLWithPath: "/Users/richard/msc/media")
+  mediaPathUrl: mediaPathUrl
 )
 
 public func name() {
