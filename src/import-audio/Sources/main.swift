@@ -5,9 +5,7 @@
 /// $ ./custom-swift.sh import-audio.swift
 
 import Foundation
-
-// require ./helpers.swift
-// exitWhenParentProcessExits()
+import SwiftHelpers
 
 let PROMPT_TO_EJECT = false
 let SKIP_WRONG_DATES = true

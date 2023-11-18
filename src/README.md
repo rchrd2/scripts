@@ -20,5 +20,8 @@ building
 
 ```
 $ swift build -c release
-# .build/release/import-audio
+$ .build/release/import-audio
+
+$ swift build -c release --show-bin-path
+/Users/richard/msc/scripts/import-audio/.build/x86_64-apple-macosx/release
 ```

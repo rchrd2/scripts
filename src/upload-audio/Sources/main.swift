@@ -4,7 +4,11 @@ Uploads a file to my web server and presents a dialog with the public url
 
 // Requires helpers.swift
 
+import AppKit
 import Foundation
+import SwiftHelpers
+import SwiftUI
+import os.log
 
 // exitWhenParentProcessExits()
 
@@ -19,7 +23,17 @@ func uploadFile(_ file: URL) {
   log("Uploading \(file.path())")
   let task = Process()
   task.launchPath = "/usr/bin/scp"
-  task.arguments = [file.path(), uploadUrl]
+  task.arguments = ["-q", file.path(), uploadUrl]
+
+  // Prints output (turns out not useful with SCP)
+  // let pipe = Pipe()
+  // pipe.fileHandleForReading.readabilityHandler = { fileHandle in
+  //   if let output = String(data: fileHandle.availableData, encoding: .utf8) {
+  //     print(output)
+  //   }
+  // }
+  // task.standardOutput = pipe
+
   task.launch()
   task.waitUntilExit()
 }

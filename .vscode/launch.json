@@ -19,6 +19,46 @@
       "name": "Release import-audio (import-audio)",
       "program": "${workspaceFolder:scripts}/import-audio/.build/release/import-audio",
       "preLaunchTask": "swift: Build Release import-audio (import-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/import-audio",
+      "name": "Debug import-audio (src/import-audio)",
+      "program": "${workspaceFolder:scripts}/src/import-audio/.build/debug/import-audio",
+      "preLaunchTask": "swift: Build Debug import-audio (src/import-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/import-audio",
+      "name": "Release import-audio (src/import-audio)",
+      "program": "${workspaceFolder:scripts}/src/import-audio/.build/release/import-audio",
+      "preLaunchTask": "swift: Build Release import-audio (src/import-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-audio",
+      "name": "Debug upload-audio (src/upload-audio)",
+      "program": "${workspaceFolder:scripts}/src/upload-audio/.build/debug/upload-audio",
+      "preLaunchTask": "swift: Build Debug upload-audio (src/upload-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-audio",
+      "name": "Release upload-audio (src/upload-audio)",
+      "program": "${workspaceFolder:scripts}/src/upload-audio/.build/release/upload-audio",
+      "preLaunchTask": "swift: Build Release upload-audio (src/upload-audio)"
     }
   ]
 }
