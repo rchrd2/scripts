@@ -2,10 +2,10 @@
 Script to play audio files simultaneously. Eg play stems of a song.
 
 Example usage:
-$ find /Users/richard/Desktop/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones -type f | /usr/bin/swift <(cat helpers.swift play8.swift)
+$ find /Users/richard/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones -type f | /usr/bin/swift <(cat helpers.swift play8.swift)
 
 This is wired to a QuickAction
-/usr/bin/swift <(cat /Users/richard/Desktop/msc/scripts/helpers.swift /Users/richard/Desktop/msc/scripts/play8.swift)
+/usr/bin/swift <(cat /Users/richard/msc/scripts/helpers.swift /Users/richard/msc/scripts/play8.swift)
 */
 
 // Requires helpers.swift

@@ -63,7 +63,7 @@ func processFile(_ file: URL) {
       // let task = Process()
       // task.launchPath = "/usr/local/bin/node"
       // task.arguments = [
-      //   "/Users/richard/Desktop/msc/scripts/prepare-audio-for-upload.js",
+      //   "/Users/richard/msc/scripts/prepare-audio-for-upload.js",
       //   datFile,
       // ]
       // task.launch()

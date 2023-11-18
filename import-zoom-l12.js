@@ -18,7 +18,7 @@ let DIRECTORIES = [
   "/Volumes/H4N_SD/STEREO/FOLDER02",
 ];
 
-const rootTargetDir = "/Users/richard/Desktop/msc/media";
+const rootTargetDir = "/Users/richard/msc/media";
 
 // https://stackoverflow.com/a/52338335
 function copyFolderSync(from, to) {

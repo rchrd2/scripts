@@ -7,8 +7,8 @@
  * If you pass a list of directories, it will play those in sequence, eg like a playlist
  *
  * Usage example:
- * $ ls /Users/richard/Desktop/msc/media/2022/2022-04-04/220404_171620/*WAV | node play8.js
- * $ ls -d /Users/richard/Desktop/msc/media/2022/2022-04-01/* | play8.js
+ * $ ls /Users/richard/msc/media/2022/2022-04-04/220404_171620/*WAV | node play8.js
+ * $ ls -d /Users/richard/msc/media/2022/2022-04-01/* | play8.js
  */
 
 const {

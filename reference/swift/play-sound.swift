@@ -1,6 +1,6 @@
 /*
 Example usage:
-$ find /Users/richard/Desktop/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones -type f | swift play-sound.swift
+$ find /Users/richard/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones -type f | swift play-sound.swift
 */
 
 import AVFoundation
@@ -49,7 +49,7 @@ func playSound(url: URL) -> AVAudioPlayer? {
 var files = readFiles()
 if files.count == 0 {
   files.append(
-    "/Users/richard/Desktop/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones/01-Piano-High.wav"
+    "/Users/richard/msc/studio/Samples/Richard_Caceres/Casio-VL-Tone/Casio-VL-Tone/Tones/01-Piano-High.wav"
   )
 }
 
