@@ -20,6 +20,7 @@ let allowedExtensions = [
   ".dat",
   ".mov",
   ".jpg",
+  ".jpeg",
   ".tif",
   ".aif",
   ".mp4",
