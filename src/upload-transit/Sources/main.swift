@@ -2,9 +2,11 @@
 Uploads a file to my web server and presents a dialog with the public url
 */
 
-// Requires helpers.swift
-
+import AppKit
 import Foundation
+import SwiftHelpers
+import SwiftUI
+import os.log
 
 exitWhenParentProcessExits()
 

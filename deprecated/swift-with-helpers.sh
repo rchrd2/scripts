@@ -23,7 +23,7 @@ if [ ! -f "$command_arg" ]; then
   exit 1
 fi
 
-helpers_path="$script_dir/helpers.swift"
+helpers_path="$script_dir/src/SwiftHelpers/Sources/SwiftHelpers/SwiftHelpers.swift"
 first_line=$(head -n 1 "$command_arg")
 
 if [[ $first_line == "#"* ]]; then

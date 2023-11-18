@@ -7,12 +7,23 @@ $ find /path/to/stems -type f | /usr/bin/swift <(cat helpers.swift play8-bounce.
 Requires helpers.swift
 */
 
+import AVFoundation
+import AppKit
 import Foundation
+import SwiftHelpers
+import SwiftUI
+import os.log
 
-var files = readFiles()
 var fileArgs: [String] = ["-m"]
 var targetDir = ""
 var bounceName: String = "BOUNCE.WAV"
+
+var files = readFiles()
+
+if files.count <= 1 {
+  log("Not enough files to bounce")
+  exit(0)
+}
 
 for file in files {
   log("file \(file)")

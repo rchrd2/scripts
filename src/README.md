@@ -1,3 +1,5 @@
+I'm not a fan of all this boilerplate for scripts. I'd like to simplify if possible.
+
 // https://developer.apple.com/documentation/packagedescription/package
 
 init commands

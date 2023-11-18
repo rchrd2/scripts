@@ -59,6 +59,146 @@
       "name": "Release upload-audio (src/upload-audio)",
       "program": "${workspaceFolder:scripts}/src/upload-audio/.build/release/upload-audio",
       "preLaunchTask": "swift: Build Release upload-audio (src/upload-audio)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/hello",
+      "name": "Debug hello (src/hello)",
+      "program": "${workspaceFolder:scripts}/src/hello/.build/debug/hello",
+      "preLaunchTask": "swift: Build Debug hello (src/hello)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/hello",
+      "name": "Release hello (src/hello)",
+      "program": "${workspaceFolder:scripts}/src/hello/.build/release/hello",
+      "preLaunchTask": "swift: Build Release hello (src/hello)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-transit",
+      "name": "Debug hello (src/upload-transit)",
+      "program": "${workspaceFolder:scripts}/src/upload-transit/.build/debug/hello",
+      "preLaunchTask": "swift: Build Debug hello (src/upload-transit)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-transit",
+      "name": "Release hello (src/upload-transit)",
+      "program": "${workspaceFolder:scripts}/src/upload-transit/.build/release/hello",
+      "preLaunchTask": "swift: Build Release hello (src/upload-transit)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-transit",
+      "name": "Debug upload-transit (src/upload-transit)",
+      "program": "${workspaceFolder:scripts}/src/upload-transit/.build/debug/upload-transit",
+      "preLaunchTask": "swift: Build Debug upload-transit (src/upload-transit)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/upload-transit",
+      "name": "Release upload-transit (src/upload-transit)",
+      "program": "${workspaceFolder:scripts}/src/upload-transit/.build/release/upload-transit",
+      "preLaunchTask": "swift: Build Release upload-transit (src/upload-transit)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8",
+      "name": "Debug hello (src/play8)",
+      "program": "${workspaceFolder:scripts}/src/play8/.build/debug/hello",
+      "preLaunchTask": "swift: Build Debug hello (src/play8)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8",
+      "name": "Release hello (src/play8)",
+      "program": "${workspaceFolder:scripts}/src/play8/.build/release/hello",
+      "preLaunchTask": "swift: Build Release hello (src/play8)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8",
+      "name": "Debug play8 (src/play8)",
+      "program": "${workspaceFolder:scripts}/src/play8/.build/debug/play8",
+      "preLaunchTask": "swift: Build Debug play8 (src/play8)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8",
+      "name": "Release play8 (src/play8)",
+      "program": "${workspaceFolder:scripts}/src/play8/.build/release/play8",
+      "preLaunchTask": "swift: Build Release play8 (src/play8)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8-bounce",
+      "name": "Debug play8 (src/play8-bounce)",
+      "program": "${workspaceFolder:scripts}/src/play8-bounce/.build/debug/play8",
+      "preLaunchTask": "swift: Build Debug play8 (src/play8-bounce)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8-bounce",
+      "name": "Release play8 (src/play8-bounce)",
+      "program": "${workspaceFolder:scripts}/src/play8-bounce/.build/release/play8",
+      "preLaunchTask": "swift: Build Release play8 (src/play8-bounce)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8-bounce",
+      "name": "Debug play8-bounce (src/play8-bounce)",
+      "program": "${workspaceFolder:scripts}/src/play8-bounce/.build/debug/play8-bounce",
+      "preLaunchTask": "swift: Build Debug play8-bounce (src/play8-bounce)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "sourceLanguages": ["swift"],
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/play8-bounce",
+      "name": "Release play8-bounce (src/play8-bounce)",
+      "program": "${workspaceFolder:scripts}/src/play8-bounce/.build/release/play8-bounce",
+      "preLaunchTask": "swift: Build Release play8-bounce (src/play8-bounce)"
     }
   ]
 }

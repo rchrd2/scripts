@@ -12,8 +12,14 @@ This is wired to a QuickAction
 
 import AVFoundation
 import Foundation
+import SwiftHelpers
 
 var files = readFiles()
+
+if files.count < 1 {
+  log("No files to play")
+  exit(0)
+}
 
 log("Playing \(files.count) files")
 
