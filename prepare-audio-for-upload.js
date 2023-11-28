@@ -13,13 +13,13 @@ helpersConfig.dryRun = false;
 const createMp3 = true;
 
 const processFile = (f, index, array) => {
-  // cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
+  let originalF = f;
+  cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
   if (createMp3 && !f.endsWith(".mp3")) {
-    let originalF = f;
     f = f.replace(/\.\w\w\w$/gi, ".mp3");
     cFile(`ffmpeg -i '${originalF}' -ab "320k" '${f}'`, f);
+    cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
   }
-  cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
   // cFile(
   //   `audiowaveform -i '${f}' -o '${f}.png' --zoom=auto -w 1000 -h 300`,
   //   `${f}.png`

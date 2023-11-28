@@ -12,18 +12,22 @@ import os.log
 
 // exitWhenParentProcessExits()
 
+helpersConfig.enablePrint = true
+helpersConfig.enableSyslog = false
+
 let uploadUrl = "rcaceres@dev.rchrd.net:sites/net.rchrd.dev/web/transit/uploads"
 let publicUrlBase: String = "https://dev.rchrd.net/audio/?file=%2Fuploads%2F"
 
 let allowedExtensions = [
-  ".wav", ".mp3", ".png", ".dat",
+  ".wav", ".mp3", ".png", ".dat", ".m4a",
 ]
 
 func uploadFile(_ file: URL) {
-  log("Uploading \(file.path())")
+  log("Uploading \(file.path(percentEncoded: false))")
+
   let task = Process()
   task.launchPath = "/usr/bin/scp"
-  task.arguments = ["-q", file.path(), uploadUrl]
+  task.arguments = ["-q", file.path(percentEncoded: false), uploadUrl]
 
   // Prints output (turns out not useful with SCP)
   // let pipe = Pipe()
@@ -39,8 +43,8 @@ func uploadFile(_ file: URL) {
 }
 
 func processFile(_ file: URL) {
-  // TODO
-  // check if file is allowed
+  log("processing \(file)")
+
   var allowed = false
   for ext in allowedExtensions {
     if file.path().lowercased().hasSuffix(ext) {
@@ -53,29 +57,68 @@ func processFile(_ file: URL) {
     return
   }
 
-  // if it ends with mp3, also upload the .dat file for convenience
-  if file.path().lowercased().hasSuffix(".mp3") {
-    let datFile = file.path() + ".dat"
-    if !FileManager.default.fileExists(atPath: datFile) {
-      // call prepare-audio-for-upload.js {datFile}
-      // TODO make this work..
-      // log("Preparing the audio for upload")
-      // let task = Process()
-      // task.launchPath = "/usr/local/bin/node"
-      // task.arguments = [
-      //   "/Users/richard/msc/scripts/prepare-audio-for-upload.js",
-      //   datFile,
-      // ]
-      // task.launch()
-      // task.waitUntilExit()
+  // if it's not a mp3 or a wav, convert it to mp3
+  if !file.path().lowercased().hasSuffix(".mp3") && !file.path().lowercased().hasSuffix(".wav") {
+    let mp3File = URL(fileURLWithPath: file.path(percentEncoded: false) + ".mp3")
+    if !FileManager.default.fileExists(atPath: mp3File.path) {
+      log(
+        "Converting \(file.path(percentEncoded: false)) to \(mp3File.path(percentEncoded: false))")
+      let task = Process()
+      task.launchPath = "/usr/local/bin/ffmpeg"
+      // ffmpeg -i '${originalF}' -ab "320k" '${f}'
+      // eg
+      // $ ffmpeg -i '2023-11-24 - yamaha ambient improv.m4a' -ab 320k '2023-11-24 - yamaha ambient improv.m4a.mp3'
+
+      task.arguments = [
+        //https://forums.swift.org/t/having-some-issues-running-ffmpeg-via-process/20575/5
+        "-nostdin",
+        "-i",
+        file.path(percentEncoded: false),
+        "-ab",
+        "320k",
+        mp3File.path(percentEncoded: false),
+      ]
+      task.launch()
+      task.waitUntilExit()
+      log("Done converting to \(mp3File.path(percentEncoded: false))")
 
     }
-    uploadFile(URL(fileURLWithPath: datFile))
+    processFile(mp3File)
+    return
+  }
+
+  // also create the .dat file for convenience
+  let datFilePath = file.path(percentEncoded: false) + ".dat"
+
+  if !FileManager.default.fileExists(atPath: datFilePath) {
+    // call cFile(`audiowaveform -i '${f}' -o '${f}.dat' -z 256 -b 8`, `${f}.dat`);
+    log("Creating the waveform \(datFilePath)")
+    let task = Process()
+    task.launchPath = "/usr/local/bin/audiowaveform"
+    task.arguments = [
+      "-i",
+      file.path(percentEncoded: false),
+      "-o",
+      datFilePath,
+      "-z",
+      "256",
+      "-b",
+      "8",
+    ]
+    task.launch()
+    task.waitUntilExit()
+    log("Done creating the waveform \(datFilePath)")
   }
 
   uploadFile(file)
+  log("Uploaded \(file.path(percentEncoded: false))")
 
-  log("Uploaded \(file)")
+  // Upload the .dat file if it exists
+  if FileManager.default.fileExists(atPath: datFilePath) {
+    uploadFile(URL(fileURLWithPath: datFilePath))
+    log("Uploaded \(datFilePath)")
+  }
+
   let basename = file.lastPathComponent
   let publicUrl =
     publicUrlBase + basename.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
@@ -108,12 +151,11 @@ func processFile(_ file: URL) {
   }
 }
 
-var files: [String] = readFiles()
-
-for file in files {
-  processFile(URL(fileURLWithPath: file))
-}
-
 func main() {
+  let files: [String] = readFiles()
 
+  for file in files {
+    processFile(URL(fileURLWithPath: file))
+  }
 }
+main()
