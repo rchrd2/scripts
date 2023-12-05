@@ -42,7 +42,7 @@ func uploadFile(_ file: URL) {
   task.waitUntilExit()
 }
 
-func processFile(_ file: URL) {
+func processFile(_ file: URL, _ isRecursive: Bool = false) {
   log("processing \(file)")
 
   var allowed = false
@@ -58,7 +58,10 @@ func processFile(_ file: URL) {
   }
 
   // if it's not a mp3 or a wav, convert it to mp3
-  if !file.path().lowercased().hasSuffix(".mp3") && !file.path().lowercased().hasSuffix(".wav") {
+  if !file.path().lowercased().hasSuffix(".mp3")
+    && !file.path().lowercased().hasSuffix(".wav")
+    && !isRecursive
+  {
     let mp3File = URL(fileURLWithPath: file.path(percentEncoded: false) + ".mp3")
     if !FileManager.default.fileExists(atPath: mp3File.path) {
       log(
@@ -83,7 +86,7 @@ func processFile(_ file: URL) {
       log("Done converting to \(mp3File.path(percentEncoded: false))")
 
     }
-    processFile(mp3File)
+    processFile(mp3File, true)
     return
   }
 
