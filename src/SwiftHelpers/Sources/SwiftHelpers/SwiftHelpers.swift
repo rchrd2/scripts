@@ -226,6 +226,35 @@ public func checkIfSpotlightFinderTagExists(to fileURL: URL, with tag: String) -
   return outputArray.contains(tag)
 }
 
+public func ensureSshAddHasBeenRun() {
+  log("ensureSshAddHasBeenRun")
+  let checkKeysCommand = Process()
+  checkKeysCommand.launchPath = "/usr/bin/ssh-add"
+  checkKeysCommand.arguments = ["-l"]
+
+  let outputPipe = Pipe()
+  checkKeysCommand.standardOutput = outputPipe
+
+  do {
+    try checkKeysCommand.run()
+    checkKeysCommand.waitUntilExit()
+  } catch {
+    // Error handling
+    alertUI("Error checking for SSH keys", onConfirm: { exit(1) })
+  }
+
+  let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+  let outputString = String(data: outputData, encoding: .utf8) ?? ""
+  log(outputString)
+
+  if outputString.contains("The agent has no identities.") {
+    log("show confirm")
+    alertUI(
+      "Please add your SSH key to the agent with `ssh-add `.", onConfirm: { exit(1) })
+  }
+
+}
+
 // **** UI Helpers ****
 
 extension NSApplication {
@@ -264,7 +293,9 @@ public func runUI<V: View>(contentView: V) {
   }
 }
 
-public func confirmUI(prompt: String, onConfirm: @escaping () -> Void) {
+public func confirmUI(
+  _ prompt: String, onConfirm: @escaping () -> Void, onCancel: @escaping () -> Void = {}
+) {
   let contentView = VStack {}.confirmationDialog(
     prompt, isPresented: .constant(true)
   ) {
@@ -272,13 +303,31 @@ public func confirmUI(prompt: String, onConfirm: @escaping () -> Void) {
       "Yes",
       action: {
         log("Confirmed")
-        onConfirm()
         NSApplication.shared.stop(nil)
+        onConfirm()
       })
     Button("No", role: .cancel) {
       log("Canceled")
       NSApplication.shared.stop(nil)
+      onCancel()
     }
+  }
+  runUI(contentView: contentView)
+}
+
+public func alertUI(
+  _ prompt: String, onConfirm: @escaping () -> Void
+) {
+  let contentView = VStack {}.confirmationDialog(
+    prompt, isPresented: .constant(true)
+  ) {
+    Button(
+      "Close",
+      role: .cancel,
+      action: {
+        NSApplication.shared.stop(nil)
+        onConfirm()
+      })
   }
   runUI(contentView: contentView)
 }

@@ -243,31 +243,35 @@ func zoomL8Import(at url: URL) {
   zoomLiveTrakImportFolder(at: soundFolder)
 }
 
-var urls: [URL] = getMountedVolumes()
+func main() {
+  let urls: [URL] = getMountedVolumes()
 
-for url in urls {
-  log("url \(url)")
-  let audioDeviceType = detectAudioDeviceType(at: url)
-  if audioDeviceType == nil {
-    log("Skipping \(url.path)")
-    continue
-  }
-  log("Detected \(audioDeviceType!) at \(url.path)")
-  if audioDeviceType == .tascamX8 {
-    tascamX8Import(at: url)
-  } else if audioDeviceType == .ZoomL8 {
-    log("Zoom L8")
-    zoomL8Import(at: url)
-  } else if audioDeviceType == .ZoomL12 {
-    log("Zoom L12")
-  } else if audioDeviceType == .ZoomH4nPro {
-    log("Zoom H4n Pro")
-  }
+  for url in urls {
+    log("url \(url)")
+    let audioDeviceType = detectAudioDeviceType(at: url)
+    if audioDeviceType == nil {
+      log("Skipping \(url.path)")
+      continue
+    }
+    log("Detected \(audioDeviceType!) at \(url.path)")
+    if audioDeviceType == .tascamX8 {
+      tascamX8Import(at: url)
+    } else if audioDeviceType == .ZoomL8 {
+      log("Zoom L8")
+      zoomL8Import(at: url)
+    } else if audioDeviceType == .ZoomL12 {
+      log("Zoom L12")
+    } else if audioDeviceType == .ZoomH4nPro {
+      log("Zoom H4n Pro")
+    }
 
-  if PROMPT_TO_EJECT {
-    confirmUI(prompt: "Would you like to unmount \(url.path)?") {
-      log("would unmount")
-      umountVolume(at: url)
+    if PROMPT_TO_EJECT {
+      confirmUI("Would you like to unmount \(url.path)?") {
+        log("would unmount")
+        umountVolume(at: url)
+      }
     }
   }
 }
+
+main()

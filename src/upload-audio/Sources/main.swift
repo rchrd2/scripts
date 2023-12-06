@@ -155,6 +155,8 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
 }
 
 func main() {
+  ensureSshAddHasBeenRun()
+
   let files: [String] = readFiles()
 
   for file in files {
