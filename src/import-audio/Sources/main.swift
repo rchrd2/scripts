@@ -7,6 +7,9 @@
 import Foundation
 import SwiftHelpers
 
+helpersConfig.enablePrint = true
+helpersConfig.enableSyslog = false
+
 let PROMPT_TO_EJECT = false
 let SKIP_WRONG_DATES = true
 
@@ -60,6 +63,17 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
   // TODO see if I can use finder sync status
   // https://developer.apple.com/documentation/findersync/fifindersynccontroller/1501577-setbadgeidentifier
 
+  let tagExists = checkIfSpotlightFinderTagExists(to: fileUrl, with: "IMPORTED")
+  if tagExists {
+    log("File already tagged as imported. Skipping: \(fileUrl.path)")
+    usleep(25000)  // 25ms
+    return
+  } else {
+    log(
+      "File not tagged as imported. Checking: \(fileUrl.path), Tags: \(getSpotlightFinderTags(to: fileUrl))"
+    )
+  }
+
   runIfFileSizeIsDifferent(
     fileUrl, destinationFileUrl,
     onNotExists: {
@@ -67,7 +81,6 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
-      sleep(2)
     },
     onSizeDifferent: {
       print(
@@ -76,14 +89,14 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
-      sleep(2)
     },
     onSame: {
-      print("File size is the same. Skipping")
+      print("File size is the same. Skipping: \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
-      // sleep for 25ms
-      usleep(25000)
+    },
+    finally: {
+      usleep(25000)  // 25ms
     })
 }
 

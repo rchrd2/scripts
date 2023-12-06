@@ -76,25 +76,29 @@ public func runIfFileUrlDoesntExist(_ url: URL, _ function: () -> Void) {
 }
 
 public func runIfFileSizeIsDifferent(
-  _ sourceURL: URL, _ destURL: URL, onNotExists: () -> Void, onSizeDifferent: () -> Void,
-  onSame:
-    () -> Void
+  _ sourceURL: URL,
+  _ destURL: URL,
+  onNotExists: () -> Void,
+  onSizeDifferent: () -> Void,
+  onSame: () -> Void,
+  finally: () -> Void = {}
 ) {
   // only run the function if the the destURL doesn't exist or the file size is different
   if !FileManager.default.fileExists(atPath: destURL.path) {
-    log("Running because dest file doesn't exist")
+    // log("Running because dest file doesn't exist")
     onNotExists()
   } else {
     let sourceFileSize = sourceURL.fileSize()
     let destFileSize = destURL.fileSize()
     if sourceFileSize != destFileSize {
-      log("File size is different so running: \(sourceFileSize) != \(destFileSize)")
+      // log("File size is different so running: \(sourceFileSize) != \(destFileSize)")
       onSizeDifferent()
     } else {
-      log("File size is the same for \(sourceURL.path) and \(destURL.path)")
+      // log("File size is the same for \(sourceURL.path) and \(destURL.path)")
       onSame()
     }
   }
+  finally()
 }
 
 // This was converted from NodeJS to Swift by ChatGPT
@@ -162,28 +166,64 @@ public func umountVolume(at url: URL) {
 }
 
 public func addSpotlightFinderTag(to fileURL: URL, with tag: String) {
-  // shell out to
-  // tag --add tagname file
+  // shell out to $ tag --add tagname file
   // TODO figure out how to do this in swift
-  // TODO add function to check for presence of tag
   // Maybe https://developer.apple.com/documentation/findersync/fifindersynccontroller/2889862-settagdata
-  let task = Process()
-  task.launchPath = "/usr/local/bin/tag"
-  task.arguments = ["--add", tag, fileURL.path]
-  task.launch()
-  task.waitUntilExit()
+
+  let tags = tag.components(separatedBy: ",")
+  for tagSingle in tags {
+    if checkIfSpotlightFinderTagExists(to: fileURL, with: tagSingle) {
+      continue
+    }
+    log("Adding tag \(tagSingle) to \(fileURL.path)")
+
+    let task = Process()
+    task.launchPath = "/usr/local/bin/tag"
+    task.arguments = ["--add", tagSingle, fileURL.path(percentEncoded: false)]
+    task.launch()
+
+    // let pipe = Pipe()
+    // task.standardOutput = pipe
+    // task.launch()
+    // task.waitUntilExit()
+    // let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    // let output = String(data: data, encoding: .utf8)
+
+    task.waitUntilExit()
+  }
 }
 
 public func removeSpotlightFinderTag(to fileURL: URL, with tag: String) {
   // shell out to
   // tag --remove tagname file
   // TODO figure out how to do this in swift
-  // TODO add function to check for presence of tag
   let task = Process()
   task.launchPath = "/usr/local/bin/tag"
-  task.arguments = ["--remove", tag, fileURL.path]
+  task.arguments = ["--remove", tag, fileURL.path(percentEncoded: false)]
   task.launch()
   task.waitUntilExit()
+}
+
+public func getSpotlightFinderTags(to fileURL: URL) -> [String] {
+  let task = Process()
+  task.launchPath = "/usr/local/bin/tag"
+  task.arguments = ["--no-name", "--list", "--garrulous", fileURL.path(percentEncoded: false)]
+  let pipe = Pipe()
+  task.standardOutput = pipe
+  task.launch()
+  task.waitUntilExit()
+  let data = pipe.fileHandleForReading.readDataToEndOfFile()
+  let output = String(data: data, encoding: .utf8)
+  var outputArray = output?.components(separatedBy: "\n")
+  outputArray?.removeLast()
+
+  return outputArray ?? []
+}
+
+public func checkIfSpotlightFinderTagExists(to fileURL: URL, with tag: String) -> Bool {
+  let outputArray = getSpotlightFinderTags(to: fileURL)
+  // log("outputArray: \(outputArray)")
+  return outputArray.contains(tag)
 }
 
 // **** UI Helpers ****
