@@ -65,7 +65,16 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
 
   let tagExists = checkIfSpotlightFinderTagExists(to: fileUrl, with: "IMPORTED")
   if tagExists {
-    log("File already tagged as imported. Skipping: \(fileUrl.path)")
+    let fileExists = FileManager.default.fileExists(atPath: destinationFileUrl.path)
+    if fileExists {
+      log(
+        "[Skipping] File tagged as imported, and dest file exists: \(fileUrl.path) -> \(destinationFileUrl.path)"
+      )
+    } else {
+      log(
+        "[Warning] File tagged as imported, but dest file does not exist: \(fileUrl.path) \(destinationFileUrl.path)"
+      )
+    }
     usleep(25000)  // 25ms
     return
   } else {
@@ -77,21 +86,21 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
   runIfFileSizeIsDifferent(
     fileUrl, destinationFileUrl,
     onNotExists: {
-      print("Does not exist. Copying\n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
+      print("[Copying] Does not exist\n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
     onSizeDifferent: {
       print(
-        "File size is different. Replacing. \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
+        "[Replacing] File size is different. \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       try! FileManager.default.trashItem(at: destinationFileUrl, resultingItemURL: nil)
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
     onSame: {
-      print("File size is the same. Skipping: \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
+      print("[Skipping] File size is the same: \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
