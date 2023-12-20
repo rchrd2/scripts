@@ -16,6 +16,8 @@ let SKIP_WRONG_DATES = true
 // When true, ignores the default _MIX.wav files Tascam X8 creates
 let IGNORE_TASCAM_MIX_FILES = false
 
+let THROTTLE: UInt32 = 200 * 1000  // ms
+
 enum AudioDeviceTypes: String {
   case tascamX8 = "TASCAM_X-8"
   case ZoomL8 = "Zoom_L-8"
@@ -75,24 +77,24 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
         "[Warning] File tagged as imported, but dest file does not exist: \(fileUrl.path) \(destinationFileUrl.path)"
       )
     }
-    usleep(25000)  // 25ms
+    usleep(THROTTLE)
     return
   } else {
     log(
-      "File not tagged as imported. Checking: \(fileUrl.path), Tags: \(getSpotlightFinderTags(to: fileUrl))"
+      "[DEBUG] File not tagged as imported. Checking: \(fileUrl.path), Tags: \(getSpotlightFinderTags(to: fileUrl))"
     )
   }
 
   runIfFileSizeIsDifferent(
     fileUrl, destinationFileUrl,
     onNotExists: {
-      print("[Copying] Does not exist\n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
+      log("[Copying] Does not exist\n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
     onSizeDifferent: {
-      print(
+      log(
         "[Replacing] File size is different. \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       try! FileManager.default.trashItem(at: destinationFileUrl, resultingItemURL: nil)
       try! FileManager.default.copyItem(at: fileUrl, to: destinationFileUrl)
@@ -100,12 +102,13 @@ func copyFileSmart(sourceURL fileUrl: URL, destURL destinationFileUrl: URL, tag:
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
     onSame: {
-      print("[Skipping] File size is the same: \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
+      log("[Skipping] File size is the same: \n--\(fileUrl.path)\n->\(destinationFileUrl.path)")
       addSpotlightFinderTag(to: destinationFileUrl, with: "\(tag)_File")
       addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
     },
     finally: {
-      usleep(25000)  // 25ms
+      log("[DEBUG] Throttle")
+      usleep(THROTTLE)
     })
 }
 
