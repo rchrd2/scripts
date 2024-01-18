@@ -14,19 +14,20 @@ let uploadUrl = "rcaceres@dev.rchrd.net:sites/net.rchrd.dev/web/transit/"
 let publicUrlBase: String = "https://dev.rchrd.net/transit/"
 
 let allowedExtensions = [
-  ".wav",
-  ".mp3",
-  ".png",
-  ".dat",
-  ".mov",
-  ".jpg",
-  ".jpeg",
-  ".tif",
   ".aif",
+  ".dat",
+  ".jpeg",
+  ".jpg",
+  ".mov",
+  ".mp3",
   ".mp4",
   ".nef",
-  ".zip",
+  ".pdf",
+  ".png",
   ".swift",
+  ".tif",
+  ".wav",
+  ".zip",
 ]
 
 func main() {
@@ -47,6 +48,10 @@ func main() {
     }
     if !allowed {
       log("Skipping \(file)")
+      alertUI(
+        "File extension not allowed: \(file)",
+        onConfirm: {}
+      )
       continue
     }
 
