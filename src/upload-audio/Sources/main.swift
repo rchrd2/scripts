@@ -13,7 +13,7 @@ import os.log
 // exitWhenParentProcessExits()
 
 helpersConfig.enablePrint = true
-helpersConfig.enableSyslog = false
+helpersConfig.enableSyslog = true
 
 let uploadUrl = "rcaceres@dev.rchrd.net:sites/net.rchrd.dev/web/transit/uploads"
 let publicUrlBase: String = "https://dev.rchrd.net/audio/?file=%2Fuploads%2F"
@@ -43,7 +43,7 @@ func uploadFile(_ file: URL) {
 }
 
 func processFile(_ file: URL, _ isRecursive: Bool = false) {
-  log("processing \(file)")
+  log("processing '\(file)'")
 
   var allowed = false
   for ext in allowedExtensions {
@@ -53,7 +53,7 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
     }
   }
   if !allowed {
-    log("Skipping \(file)")
+    log("Skipping '\(file)'")
     return
   }
 
@@ -62,7 +62,7 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
     && !file.path().lowercased().hasSuffix(".wav")
     && !isRecursive
   {
-    let mp3File = URL(fileURLWithPath: file.path(percentEncoded: false) + ".mp3")
+    let mp3File = file.deletingPathExtension().appendingPathExtension("mp3")
     if !FileManager.default.fileExists(atPath: mp3File.path) {
       log(
         "Converting \(file.path(percentEncoded: false)) to \(mp3File.path(percentEncoded: false))")
@@ -160,6 +160,7 @@ func main() {
   let files: [String] = readFiles()
 
   for file in files {
+    log("upload audio debug: '\(file)'")
     processFile(URL(fileURLWithPath: file))
   }
 }

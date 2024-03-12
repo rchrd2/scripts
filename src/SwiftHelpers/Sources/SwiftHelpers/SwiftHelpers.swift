@@ -18,7 +18,7 @@ public let mediaDir = ProcessInfo.processInfo.environment["MEDIA_DIR"]
 public var helpersConfig = HelpersConfig(
   dryRun: false,
   // How to monitor syslog:
-  // $ log stream --info --debug --predicate 'eventMessage CONTAINS "SCRIPTS"
+  // $ log stream --info --debug --predicate 'eventMessage CONTAINS "SCRIPTS"'
   enableSyslog: true,
   enablePrint: false,
   mediaPathUrl: URL(fileURLWithPath: mediaDir ?? "/Users/richard/msc/media")
