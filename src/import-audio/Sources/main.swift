@@ -211,15 +211,16 @@ func zoomLiveTrakFileToDest(at url: URL, mediaPathUrl: URL = helpersConfig.media
 
   print("destinationFile \(destinationFile)")
 
-  // If year is less than 2023 throw an exception
-  if SKIP_WRONG_DATES && Int(year) ?? 0 < 2023 {
-    throw "Year is less than 2023"
+  // If year is less than 2022 throw an exception
+  if SKIP_WRONG_DATES && Int(year) ?? 0 < 2022 {
+    throw "Year is less than 2022"
   }
 
   return destinationFile
 }
 
 func zoomLiveTrakImportFolder(at url: URL, mediaPathUrl: URL = helpersConfig.mediaPathUrl) {
+  // Should work for zoom L8 and L12 folders
   let folderContents = try! FileManager.default.contentsOfDirectory(
     at: url, includingPropertiesForKeys: nil, options: [])
   for fileUrl in folderContents {
@@ -246,6 +247,22 @@ func zoomL8Import(at url: URL) {
   zoomLiveTrakImportFolder(at: soundFolder)
 }
 
+func zoomL12Import(at url: URL) {
+  let folders = [
+    "FOLDER01", "FOLDER02", "FOLDER03", "FOLDER04", "FOLDER05", "FOLDER06",
+    "FOLDER07", "FOLDER08", "FOLDER09", "FOLDER10",
+  ]
+  for folder in folders {
+    let soundFolder = url.appendingPathComponent(folder)
+    let soundFolderExists = FileManager.default.fileExists(atPath: soundFolder.path)
+    if !soundFolderExists {
+      print("no sound folder at \(soundFolder.path)")
+      continue
+    }
+    zoomLiveTrakImportFolder(at: soundFolder)
+  }
+}
+
 func main() {
   let urls: [URL] = getMountedVolumes()
 
@@ -264,6 +281,7 @@ func main() {
       zoomL8Import(at: url)
     } else if audioDeviceType == .ZoomL12 {
       log("Zoom L12")
+      zoomL12Import(at: url)
     } else if audioDeviceType == .ZoomH4nPro {
       log("Zoom H4n Pro")
     }
