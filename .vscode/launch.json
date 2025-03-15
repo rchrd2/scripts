@@ -199,6 +199,24 @@
       "name": "Release play8-bounce (src/play8-bounce)",
       "program": "${workspaceFolder:scripts}/src/play8-bounce/.build/release/play8-bounce",
       "preLaunchTask": "swift: Build Release play8-bounce (src/play8-bounce)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/archive-to-media",
+      "name": "Debug archive-to-media (src/archive-to-media)",
+      "program": "${workspaceFolder:scripts}/src/archive-to-media/.build/debug/archive-to-media",
+      "preLaunchTask": "swift: Build Debug archive-to-media (src/archive-to-media)"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:scripts}/src/archive-to-media",
+      "name": "Release archive-to-media (src/archive-to-media)",
+      "program": "${workspaceFolder:scripts}/src/archive-to-media/.build/release/archive-to-media",
+      "preLaunchTask": "swift: Build Release archive-to-media (src/archive-to-media)"
     }
   ]
 }

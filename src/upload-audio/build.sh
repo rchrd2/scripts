@@ -11,3 +11,7 @@ if [ ! -f "../../bin/$SCRIPT_NAME" ]; then
 fi
 
 echo "$(realpath "../../bin/$SCRIPT_NAME")"
+
+
+# Cursor gave this build command
+# cd src/upload-audio && swift package clean && swift package resolve && swift build

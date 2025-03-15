@@ -10,10 +10,12 @@ import SwiftHelpers
 import SwiftUI
 import os.log
 
-// exitWhenParentProcessExits()
+exitWhenParentProcessExits()
 
 helpersConfig.enablePrint = true
 helpersConfig.enableSyslog = true
+
+let forceMp3  = true
 
 let uploadUrl = "rcaceres@dev.rchrd.net:sites/net.rchrd.dev/web/transit/uploads"
 let publicUrlBase: String = "https://dev.rchrd.net/audio/?file=%2Fuploads%2F"
@@ -59,7 +61,7 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
 
   // if it's not a mp3 or a wav, convert it to mp3
   if !file.path().lowercased().hasSuffix(".mp3")
-    && !file.path().lowercased().hasSuffix(".wav")
+    && forceMp3
     && !isRecursive
   {
     let mp3File = file.deletingPathExtension().appendingPathExtension("mp3")
