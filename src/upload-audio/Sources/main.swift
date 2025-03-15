@@ -135,18 +135,16 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
     Button("Open URL") {
       log("Opened URL: \(publicUrl)")
       NSWorkspace.shared.open(URL(string: publicUrl)!)
-      NSApplication.shared.stop(nil)
+      NSApplication.shared.terminate(nil)
     }
     Button("Copy URL") {
       NSPasteboard.general.clearContents()
       NSPasteboard.general.setString(publicUrl, forType: .string)
       log("Copied URL: \(publicUrl)")
-      NSApplication.shared.stop(nil)
-      // TODO use share dialog instead
-      // https://stackoverflow.com/questions/60952334/swiftui-using-nssharingservicepicker-in-macos
+      NSApplication.shared.terminate(nil)
     }
     Button("Close", role: .cancel) {
-      NSApplication.shared.stop(nil)
+      NSApplication.shared.terminate(nil)
     }
   }
 

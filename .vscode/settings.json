@@ -1,1 +1,14 @@
-{}
+{
+  "emeraldwalk.runonsave": {
+    "shell": "bash",
+    "commands": [
+      {
+        "match": "\\.swift$",
+        "cmd": "echo 'Running build...' && cd ${fileDirname}/.. && ./build.sh || echo 'Build failed'",
+        "isAsync": false,
+        "silent": false,
+        "showOutput": true
+      }
+    ]
+  }
+}
