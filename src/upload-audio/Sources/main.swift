@@ -129,28 +129,30 @@ func processFile(_ file: URL, _ isRecursive: Bool = false) {
     publicUrlBase + basename.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
   log("Public URL: \(publicUrl)")
 
-  let contentView = VStack {}.confirmationDialog(
-    "Upload Complete: \(basename)", isPresented: .constant(true)
-  ) {
-    Button("Open URL") {
-      log("Opened URL: \(publicUrl)")
-      NSWorkspace.shared.open(URL(string: publicUrl)!)
-      NSApplication.shared.terminate(nil)
-    }
-    Button("Copy URL") {
-      NSPasteboard.general.clearContents()
-      NSPasteboard.general.setString(publicUrl, forType: .string)
-      log("Copied URL: \(publicUrl)")
-      NSApplication.shared.terminate(nil)
-    }
-    Button("Close", role: .cancel) {
-      NSApplication.shared.terminate(nil)
-    }
-  }
-
-  // if file doesnt end in .dat
+  // Only show dialog if we're not processing a .dat file
   if !file.path().lowercased().hasSuffix(".dat") {
+    let contentView = VStack {}.confirmationDialog(
+      "File URL: \(basename)", isPresented: .constant(true)
+    ) {
+      Button("Open URL") {
+        log("Opened URL: \(publicUrl)")
+        NSWorkspace.shared.open(URL(string: publicUrl)!)
+        NSApplication.shared.terminate(nil)
+      }
+      Button("Copy URL") {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(publicUrl, forType: .string)
+        log("Copied URL: \(publicUrl)")
+        NSApplication.shared.terminate(nil)
+      }
+      Button("Close", role: .cancel) {
+        NSApplication.shared.terminate(nil)
+      }
+    }
     runUI(contentView: contentView)
+  } else {
+    // For .dat files, just exit since we don't need to show the dialog
+    NSApplication.shared.terminate(nil)
   }
 }
 
