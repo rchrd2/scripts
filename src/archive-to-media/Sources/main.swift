@@ -51,6 +51,7 @@ func archiveFile(filePath: String) {
         .appendingPathComponent(dateFolder)
 
     log("Target directory: \(targetDir.path)")
+    lastProcessedFolder = targetDir
 
     // Create target directory if it doesn't exist
     if !FileManager.default.fileExists(atPath: targetDir.path) {
@@ -87,7 +88,6 @@ func archiveFile(filePath: String) {
             addSpotlightFinderTag(to: targetFile, with: "Archived_File")
             addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
             addSpotlightFinderTag(to: targetDir, with: "Archived_Project")
-            lastProcessedFolder = targetDir
             filesImported += 1
         },
         onSizeDifferent: {
@@ -97,7 +97,6 @@ func archiveFile(filePath: String) {
             addSpotlightFinderTag(to: targetFile, with: "Archived_File")
             addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
             addSpotlightFinderTag(to: targetDir, with: "Archived_Project")
-            lastProcessedFolder = targetDir
             filesImported += 1
         },
         onSame: {
@@ -105,7 +104,6 @@ func archiveFile(filePath: String) {
             addSpotlightFinderTag(to: targetFile, with: "Archived_File")
             addSpotlightFinderTag(to: fileUrl, with: "IMPORTED,Gray")
             addSpotlightFinderTag(to: targetDir, with: "Archived_Project")
-            lastProcessedFolder = targetDir
             filesSkipped += 1
         })
 }
