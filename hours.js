@@ -13,18 +13,16 @@ let totalHours = 0;
 
 const lines = text.split("\n");
 lines.forEach((line) => {
-  // regular expression to find X hours
-  const regex = /(\-?\d?\d?\d?\.?\d?\d?)?\s*hours?/g;
-  const matches = line.match(regex);
+  // regular expression to find X hours in parentheses
+  const regex = /\(((?:\-?\d?\d?\d?\.?\d?\d?)?\s*hours?)\)/g;
+  const matches = line.matchAll(regex);
 
-  if (matches) {
-    console.log(line);
-    for (const match of matches) {
-      const numericPart = parseFloat(match);
-      if (!isNaN(numericPart)) {
-        // console.log(numericPart);
-        totalHours += numericPart;
-      }
+  for (const match of matches) {
+    const numericPart = parseFloat(match[1]);
+    if (!isNaN(numericPart)) {
+      // console.log(numericPart);
+      console.log(`${numericPart}\t ${line}`);
+      totalHours += numericPart;
     }
   }
 });
